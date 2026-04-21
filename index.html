@@ -1,2 +1,75 @@
-<h1>Hello!</h1>
-<h3>welcome to the WAZAMAP</h3>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>WAZAMAP</title>
+  <style>
+    body {
+      background: #0f172a;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 30px;
+    }
+    .map {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      margin-top: 50px;
+    }
+    .row {
+      display: flex;
+      gap: 30px;
+    }
+    .node {
+      padding: 15px 25px;
+      background: #1e293b;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .node:hover {
+      background: #38bdf8;
+      color: black;
+    }
+    .arrow {
+      font-size: 24px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>:martial_arts_uniform: WAZAMAP</h1>
+
+<div class="map">
+
+  <div class="node" onclick="go('tachi.html')">START / TACHI</div>
+
+  <div class="arrow">↓</div>
+
+  <div class="node" onclick="go('closed_guard.html')">CLOSED GUARD</div>
+
+  <div class="row">
+    <div class="node" onclick="go('sweep.html')">SWEEP</div>
+    <div class="node" onclick="go('back.html')">BACK TAKE</div>
+  </div>
+
+  <div class="row">
+    <div class="node" onclick="go('top.html')">TOP POSITION</div>
+    <div class="node" onclick="go('choke.html')">CHOKE</div>
+  </div>
+
+</div>
+
+<script>
+function go(page) {
+  window.location.href = page;
+}
+</script>
+
+</body>
+</html>
