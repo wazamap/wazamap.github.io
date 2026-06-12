@@ -1,58 +1,46 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BJJ Flow</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="theme-stand">
+    <main class="flow-room" aria-labelledby="page-title">
+      <p class="ghost-word" data-ghost-word aria-hidden="true"></p>
+      <svg class="line-drawing" data-line-drawing viewBox="0 0 900 680" aria-hidden="true"></svg>
 
-[시합 시작]
+      <header class="topbar">
+        <a class="brand" href="index.html" aria-label="BJJ Flow ホーム">
+          <span class="brand-mark"></span>
+          <span>WAZAMAP</span>
+        </a>
+        <nav class="flow-nav" aria-label="ポジション移動">
+          <span class="crumb">
+            <span data-group-label></span>
+            <span data-node-label></span>
+          </span>
+          <label class="visually-hidden" for="node-picker">ポジションを選択</label>
+          <select id="node-picker" class="node-picker" data-node-picker></select>
+        </nav>
+      </header>
 
-  
+      <section class="stage">
+        <div class="flow-copy">
+          <p class="eyebrow" data-type-label></p>
+          <h1 id="page-title" data-title></h1>
+          <p class="lead" data-summary></p>
+          <dl class="facts" data-facts></dl>
+        </div>
 
-→ [[스탠딩 공방]]
+        <aside class="branch-panel" aria-label="次の選択肢">
+          <p class="panel-label" data-branch-label></p>
+        </aside>
+      </section>
+    </main>
 
-→ [[히키코미]]
-
-→ [[테이크다운]]
-
-  
-
-↓
-
-  
-
-[탑 / 바텀 분기]
-
-  
-
-탑:
-
-→ [[패스 가드]]
-
-→ [[사이드 포지션]]
-
-→ [[마운트]]
-
-→ [[서브미션]]
-
-  
-
-바텀:
-
-→ [[클로즈드 가드]]
-
-→ [[하프 가드]]
-
-→ [[스윕]]
-
-→ [[탑 전환]]
-
-  
-
-↓
-
-  
-
-[불리한 상황 (탈출)]
-
-  
-
-→ [[사이드 포지션 탈출]]
-
-→ [[클로즈드 가드 탈출]]
-
-→ [[마운트 탈출]]
+    <script src="workflows.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
