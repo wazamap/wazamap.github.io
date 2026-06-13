@@ -104,7 +104,8 @@ a {
 .flow-room {
   position: relative;
   min-height: 100svh;
-  overflow: hidden;
+  overflow-x: clip;
+  overflow-y: auto;
   isolation: isolate;
   padding: clamp(18px, 3vw, 36px);
 }
@@ -281,21 +282,26 @@ a {
 }
 
 h1 {
-  max-width: 12ch;
+  max-width: min(12ch, 100%);
   margin: 0;
   font-size: clamp(3rem, 7.8vw, 7.5rem);
   font-weight: 860;
   line-height: 0.93;
   letter-spacing: 0;
+  line-break: strict;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .lead {
-  max-width: 620px;
+  max-width: min(620px, 100%);
   margin: 28px 0 0;
   color: var(--muted);
   font-size: clamp(1.04rem, 2vw, 1.28rem);
   line-height: 1.75;
-  word-break: keep-all;
+  line-break: strict;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .facts {
@@ -331,6 +337,41 @@ h1 {
   line-height: 1.48;
   word-break: keep-all;
   overflow-wrap: anywhere;
+}
+
+.detail-panel {
+  display: grid;
+  gap: 10px;
+  max-width: 720px;
+  margin: 18px 0 0;
+}
+
+.detail-panel div {
+  min-width: 0;
+  padding: 16px 17px;
+  border: 1px solid var(--subtle);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(16px);
+}
+
+.detail-panel h2 {
+  margin: 0 0 9px;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 840;
+  letter-spacing: 0.04em;
+}
+
+.detail-panel p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.94rem;
+  font-weight: 620;
+  line-height: 1.62;
+  line-break: strict;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .branch-panel {
@@ -478,7 +519,7 @@ h1 {
   }
 
   h1 {
-    max-width: 11ch;
+    max-width: 100%;
   }
 
   .facts {
@@ -542,13 +583,15 @@ h1 {
   }
 
   h1 {
-    max-width: 10ch;
-    font-size: clamp(2.65rem, 15vw, 4.6rem);
+    max-width: 100%;
+    font-size: clamp(2.55rem, 12.5vw, 4rem);
+    line-height: 1.1;
   }
 
   .lead {
     margin-top: 22px;
     font-size: 1rem;
+    line-height: 1.65;
   }
 
   .facts {
@@ -558,6 +601,14 @@ h1 {
 
   .facts div {
     min-height: 88px;
+  }
+
+  .detail-panel {
+    margin-top: 14px;
+  }
+
+  .detail-panel div {
+    padding: 14px;
   }
 
   .branch-panel {

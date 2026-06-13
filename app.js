@@ -14,6 +14,7 @@
     typeLabel: document.querySelector("[data-type-label]"),
     summary: document.querySelector("[data-summary]"),
     facts: document.querySelector("[data-facts]"),
+    flowCopy: document.querySelector(".flow-copy"),
     branchPanel: document.querySelector(".branch-panel"),
     branchLabel: document.querySelector("[data-branch-label]"),
     ghostWord: document.querySelector("[data-ghost-word]"),
@@ -95,6 +96,104 @@
     });
   }
 
+  function factValue(node, label) {
+    return node.facts.find((fact) => fact.label === label)?.value;
+  }
+
+  function uniqueList(items) {
+    return [...new Set(items.filter(Boolean))];
+  }
+
+  function nodeLabel(id) {
+    return nodeById.get(id)?.label;
+  }
+
+  function compactList(items, limit) {
+    const values = uniqueList(items);
+    if (values.length <= limit) return values.join("、");
+    return `${values.slice(0, limit).join("、")}など`;
+  }
+
+  function incomingEdgesTo(id) {
+    return edges.filter((edge) => edge.to === id);
+  }
+
+  function detailIntro(node, outgoing, incoming) {
+    const type = typeById.get(node.type)?.label || "技";
+    const entries = compactList(incoming.map((edge) => nodeLabel(edge.from)), 4);
+    const exits = compactList(outgoing.map((edge) => nodeLabel(edge.to)), 4);
+
+    if (entries && exits) {
+      return `${node.label}は${type}として、${entries}から入り、${exits}へ展開しやすい位置づけです。${node.summary}`;
+    }
+
+    if (exits) {
+      return `${node.label}は${type}として、ここから${exits}へ展開するための起点です。${node.summary}`;
+    }
+
+    if (entries) {
+      return `${node.label}は${type}として、${entries}からつながる終着点または攻撃の区切りです。${node.summary}`;
+    }
+
+    return `${node.label}は${type}として扱うノードです。${node.summary}`;
+  }
+
+  function detailAction(node, outgoing) {
+    const purpose = factValue(node, "目的");
+    const entry = factValue(node, "入口");
+    const attack = factValue(node, "攻撃");
+    const point = factValue(node, "要点");
+    const exit = factValue(node, "出口");
+    const next = compactList(outgoing.map((edge) => edge.label || nodeLabel(edge.to)), 3);
+
+    if (point) return `何をするか: ${point}。${entry ? `主な入口は${entry}です。` : ""}`;
+    if (purpose) return `何をするか: ${purpose}。${next ? `次は${next}を狙います。` : ""}`;
+    if (attack) return `何をするか: ${attack}を作るために相手の姿勢、腕、首、脚のどれかを孤立させます。`;
+    if (exit) return `何をするか: ${exit}へ出るために相手のベースやフレームを崩します。`;
+    return `何をするか: 相手の姿勢や支点を変化させ、自分に有利な次の選択肢を作ります。`;
+  }
+
+  function detailWatch(node, incoming) {
+    const caution = factValue(node, "注意");
+    const uses = factValue(node, "使う場面");
+    const source = compactList(incoming.map((edge) => edge.label), 3);
+
+    if (caution && uses) return `見るポイント: ${uses}で使いやすく、${caution}`;
+    if (caution) return `見るポイント: ${caution}`;
+    if (source) return `見るポイント: ${source}の流れで相手の反応を見て、無理に形だけを追わないこと。`;
+    return "見るポイント: 形よりも、相手の重心・姿勢・逃げ道がどこにあるかを確認します。";
+  }
+
+  function renderDetails(node) {
+    let panel = document.querySelector("[data-detail-panel]");
+    if (!panel) {
+      panel = document.createElement("section");
+      panel.className = "detail-panel";
+      panel.setAttribute("data-detail-panel", "");
+      dom.flowCopy.append(panel);
+    }
+
+    const outgoing = edgesFrom(node.id);
+    const incoming = incomingEdgesTo(node.id);
+    const detailItems = [
+      { label: "全体像", value: detailIntro(node, outgoing, incoming) },
+      { label: "動きの意味", value: detailAction(node, outgoing) },
+      { label: "確認ポイント", value: detailWatch(node, incoming) },
+    ];
+
+    panel.innerHTML = "";
+    detailItems.forEach((item) => {
+      const block = document.createElement("div");
+      const title = document.createElement("h2");
+      const text = document.createElement("p");
+
+      title.textContent = item.label;
+      text.textContent = item.value;
+      block.append(title, text);
+      panel.append(block);
+    });
+  }
+
   function renderBranches(node) {
     dom.branchPanel.querySelectorAll(".branch").forEach((branch) => branch.remove());
     dom.branchLabel.textContent = "次に選べる流れ";
@@ -159,7 +258,7 @@
     const group = groupById.get(node.group);
     const type = typeById.get(node.type);
 
-    document.title = `BJJ Flow - ${node.label}`;
+    document.title = `WAZAMAP - ${node.label}`;
     dom.body.className = `theme-${node.theme}`;
     dom.title.textContent = node.title;
     dom.summary.textContent = node.summary;
@@ -171,6 +270,7 @@
 
     renderDrawing(node);
     renderFacts(node);
+    renderDetails(node);
     renderBranches(node);
     renderPicker(node.id);
   }
